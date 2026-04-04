@@ -1717,8 +1717,8 @@ var JointControl = class {
             } else if (nextJointAngle < -90) {
               this.setJointAngle(-90);
             } else {
+              this.setJointAngle(nextJointAngle);
             }
-            this.setJointAngle(nextJointAngle);
           }
         }
       })[pointerInfo.type]?.();

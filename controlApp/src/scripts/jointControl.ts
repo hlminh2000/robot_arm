@@ -63,17 +63,15 @@ export default class JointControl {
                         const pointerDownVector = this.scenePointerDown.subtract(projectedJointPosition2D);
                         const currentPointerVector = new Vector2(scene.pointerX, scene.pointerY).subtract(projectedJointPosition2D);
                         const deltaAngle = Tools.ToDegrees(getSignedAngleRad(currentPointerVector, pointerDownVector));
-
                         const nextJointAngle = this.lastJointAngle + deltaAngle;
+
                         if (nextJointAngle > 90) {
                             this.setJointAngle(90);
-                        }
-                        else if (nextJointAngle < -90) {
+                        } else if (nextJointAngle < -90) {
                             this.setJointAngle(-90);
+                        } else{
+                            this.setJointAngle(nextJointAngle)
                         }
-                        else{
-                        }
-                        this.setJointAngle(nextJointAngle)
                     }
                 }
             } as const)[pointerInfo.type]?.();
