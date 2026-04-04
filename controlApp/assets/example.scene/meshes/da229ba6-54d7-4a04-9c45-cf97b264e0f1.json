@@ -1,0 +1,208 @@
+{
+    "meshes": [
+        {
+            "name": "Joint 1",
+            "id": "da229ba6-54d7-4a04-9c45-cf97b264e0f1",
+            "uniqueId": 1775319382758,
+            "type": "Mesh",
+            "position": [
+                20.823430707308944,
+                111.0545556517904,
+                -244.49602500397862
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "scaling": [
+                1,
+                1,
+                1
+            ],
+            "localMatrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "isEnabled": true,
+            "isVisible": true,
+            "infiniteDistance": false,
+            "pickable": true,
+            "receiveShadows": true,
+            "billboardMode": 0,
+            "visibility": 1,
+            "alwaysSelectAsActiveMesh": false,
+            "checkCollisions": false,
+            "ellipsoid": [
+                0.5,
+                1,
+                0.5
+            ],
+            "ellipsoidOffset": [
+                0,
+                0,
+                0
+            ],
+            "doNotSyncBoundingInfo": false,
+            "isBlocker": false,
+            "sideOrientation": 1,
+            "isUnIndexed": false,
+            "geometryUniqueId": 1775319382759,
+            "geometryId": "1d05575d-275f-4f54-869a-b9ae5f6b0ab6",
+            "subMeshes": null,
+            "materialId": "default material",
+            "metadata": {
+                "type": "Box",
+                "width": 24.000000000000007,
+                "depth": 20,
+                "height": 30,
+                "sideOrientation": 0
+            },
+            "instances": [
+                {
+                    "name": "Joint 2",
+                    "id": "7f8f8a85-9733-49c9-8e3b-2b41d17ef165",
+                    "isEnabled": true,
+                    "isVisible": true,
+                    "isPickable": true,
+                    "checkCollisions": false,
+                    "position": [
+                        1.6276401114513774,
+                        126.87127402206085,
+                        2.801050542462008
+                    ],
+                    "scaling": [
+                        1,
+                        0.9999999999999997,
+                        0.9999999999999997
+                    ],
+                    "rotation": [
+                        1.5707963267948966,
+                        0,
+                        0
+                    ],
+                    "metadata": {
+                        "parentId": 1775319569381
+                    },
+                    "animations": [],
+                    "ranges": [],
+                    "uniqueId": 1775319735817
+                }
+            ],
+            "animations": [],
+            "ranges": [],
+            "layerMask": 268435455,
+            "alphaIndex": 1.7976931348623157e+308,
+            "hasVertexAlpha": false,
+            "overlayAlpha": 0,
+            "overlayColor": [
+                0,
+                0,
+                0
+            ],
+            "renderOverlay": false,
+            "applyFog": true,
+            "delayLoadingFile": "assets/example.scene/geometries/1d05575d-275f-4f54-869a-b9ae5f6b0ab6.babylonbinarymeshdata",
+            "boundingBoxMaximum": [
+                12.000000000000004,
+                15,
+                10
+            ],
+            "boundingBoxMinimum": [
+                -12.000000000000004,
+                -15,
+                -10
+            ],
+            "_binaryInfo": {
+                "positionsAttrDesc": {
+                    "count": 72,
+                    "stride": 3,
+                    "offset": 0,
+                    "dataType": 1
+                },
+                "normalsAttrDesc": {
+                    "count": 72,
+                    "stride": 3,
+                    "offset": 288,
+                    "dataType": 1
+                },
+                "uvsAttrDesc": {
+                    "count": 48,
+                    "stride": 2,
+                    "offset": 576,
+                    "dataType": 1
+                },
+                "indicesAttrDesc": {
+                    "count": 36,
+                    "stride": 1,
+                    "offset": 768,
+                    "dataType": 0
+                },
+                "subMeshesAttrDesc": {
+                    "count": 1,
+                    "stride": 5,
+                    "offset": 912,
+                    "dataType": 0
+                }
+            },
+            "positions": null,
+            "normals": null,
+            "uvs": null,
+            "hasUVs": true,
+            "indices": null
+        }
+    ],
+    "transformNodes": [],
+    "cameras": [],
+    "lights": [],
+    "materials": [],
+    "geometries": {
+        "boxes": [],
+        "spheres": [],
+        "cylinders": [],
+        "toruses": [],
+        "grounds": [],
+        "planes": [],
+        "torusKnots": [],
+        "vertexData": []
+    },
+    "metadata": {
+        "type": "Box",
+        "width": 24.000000000000007,
+        "depth": 20,
+        "height": 30,
+        "sideOrientation": 0
+    },
+    "basePoseMatrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+    ]
+}
