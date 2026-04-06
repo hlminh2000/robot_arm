@@ -70,7 +70,14 @@
                 "width": 24.000000000000007,
                 "depth": 20,
                 "height": 30,
-                "sideOrientation": 0
+                "sideOrientation": 0,
+                "scripts": [
+                    {
+                        "enabled": true,
+                        "key": "scripts/jointControl.ts",
+                        "_id": "c15d5897-8261-4a5a-9a1b-ca34ae312230"
+                    }
+                ]
             },
             "instances": [
                 {
@@ -96,6 +103,13 @@
                         0
                     ],
                     "metadata": {
+                        "scripts": [
+                            {
+                                "enabled": true,
+                                "key": "scripts/jointControl.ts",
+                                "_id": "0e970ec5-f367-4f04-b8b9-081b99f412ba"
+                            }
+                        ],
                         "parentId": 1775319569381
                     },
                     "animations": [],
@@ -118,12 +132,12 @@
             "applyFog": true,
             "delayLoadingFile": "assets/example.scene/geometries/1d05575d-275f-4f54-869a-b9ae5f6b0ab6.babylonbinarymeshdata",
             "boundingBoxMaximum": [
-                12.000000000000004,
+                12,
                 15,
                 10
             ],
             "boundingBoxMinimum": [
-                -12.000000000000004,
+                -12,
                 -15,
                 -10
             ],
@@ -185,7 +199,14 @@
         "width": 24.000000000000007,
         "depth": 20,
         "height": 30,
-        "sideOrientation": 0
+        "sideOrientation": 0,
+        "scripts": [
+            {
+                "enabled": true,
+                "key": "scripts/jointControl.ts",
+                "_id": "c15d5897-8261-4a5a-9a1b-ca34ae312230"
+            }
+        ]
     },
     "basePoseMatrix": [
         1,

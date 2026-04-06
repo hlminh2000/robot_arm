@@ -1659,6 +1659,7 @@ function getSignedAngleRad(vecA, vecB) {
   return Math.atan2(cross, dot);
 }
 __name(getSignedAngleRad, "getSignedAngleRad");
+var clamp = /* @__PURE__ */ __name((value, min, max) => Math.min(Math.max(value, min), max), "clamp");
 var JointControl = class {
   constructor(mesh) {
     this.mesh = mesh;
@@ -1694,32 +1695,28 @@ var JointControl = class {
           this.lastJointAngle = this.currentJointAngle;
         },
         [import_babylonjs63.PointerEventTypes.POINTERMOVE]: () => {
-          if (this.isMoving) {
-            const projectedJointPosition = import_babylonjs63.Vector3.Project(
-              this.jointMesh.getAbsolutePivotPoint(),
-              import_babylonjs63.Matrix.Identity(),
-              scene.getTransformMatrix(),
-              new import_babylonjs63.Viewport(0, 0, 1, 1).toGlobal(
-                scene.getEngine().getRenderingCanvas().width,
-                scene.getEngine().getRenderingCanvas().height
-              )
-            );
-            const projectedJointPosition2D = new import_babylonjs63.Vector2(
-              projectedJointPosition.x,
-              projectedJointPosition.y
-            );
-            const pointerDownVector = this.scenePointerDown.subtract(projectedJointPosition2D);
-            const currentPointerVector = new import_babylonjs63.Vector2(scene.pointerX, scene.pointerY).subtract(projectedJointPosition2D);
-            const deltaAngle = import_babylonjs63.Tools.ToDegrees(getSignedAngleRad(currentPointerVector, pointerDownVector));
-            const nextJointAngle = this.lastJointAngle + deltaAngle;
-            if (nextJointAngle > 90) {
-              this.setJointAngle(90);
-            } else if (nextJointAngle < -90) {
-              this.setJointAngle(-90);
-            } else {
-              this.setJointAngle(nextJointAngle);
-            }
+          if (!this.isMoving) {
+            return;
           }
+          const projectedJointPosition = import_babylonjs63.Vector3.Project(
+            this.jointMesh.getAbsolutePivotPoint(),
+            import_babylonjs63.Matrix.Identity(),
+            scene.getTransformMatrix(),
+            new import_babylonjs63.Viewport(0, 0, 1, 1).toGlobal(
+              scene.getEngine().getRenderingCanvas().width,
+              scene.getEngine().getRenderingCanvas().height
+            )
+          );
+          const projectedJointPosition2D = new import_babylonjs63.Vector2(
+            projectedJointPosition.x,
+            projectedJointPosition.y
+          );
+          const pointerDownVector = this.scenePointerDown.subtract(projectedJointPosition2D);
+          const currentPointerVector = new import_babylonjs63.Vector2(scene.pointerX, scene.pointerY).subtract(projectedJointPosition2D);
+          const deltaAngle = import_babylonjs63.Tools.ToDegrees(getSignedAngleRad(currentPointerVector, pointerDownVector));
+          const nextJointAngle = this.lastJointAngle + deltaAngle;
+          if (Math.abs(nextJointAngle - this.currentJointAngle) > 45) return;
+          this.setJointAngle(clamp(nextJointAngle, -90, 90));
         }
       })[pointerInfo.type]?.();
     });
@@ -1727,13 +1724,15 @@ var JointControl = class {
   setJointAngle(deg) {
     this.currentJointAngle = deg;
     this.jointMesh.rotation.z = import_babylonjs63.Tools.ToRadians(deg);
+    console.log("window.parent:", window.parent);
+    console.log("window.parent?.electron:", window.parent?.electron);
+    console.log("window.electron:", window.electron);
+    window.electron.send("send-to-arduino", JSON.stringify({
+      joint: this.jointMesh.name,
+      angle: deg + 90
+    }));
   }
   onUpdate() {
-  }
-  static ensureActionManager(mesh) {
-    if (!mesh.actionManager) {
-      mesh.actionManager = new import_babylonjs63.ActionManager(mesh.getScene());
-    }
   }
 };
 

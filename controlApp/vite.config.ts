@@ -5,7 +5,7 @@ export default defineConfig({
 	plugins: [tailwindcss()],
 	base: "./",
 	server: {
-		port: 3000,
+		port: 5000,
 	},
 	optimizeDeps: {
 		exclude: ["@babylonjs/havok"],
