@@ -17,6 +17,7 @@ public:
 
   void setup()
   {
+    Serial.println(this->servoPin);
     this->servo.attach(this->servoPin);
   }
 
@@ -25,5 +26,6 @@ public:
     int controlSignal = analogRead(this->controlPin);
     int degree = map(controlSignal, 0, 1023, 0, 180);
     this->servo.write(degree);
+    // Serial.println(degree);
   }
 };
