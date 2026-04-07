@@ -13,5 +13,15 @@ deploy:
 	make compile 
 	make upload
 
+compile_zig:
+	cd zig && zig build
+
+upload_zig:
+	arduino-cli upload -p /dev/${DEVICE} --fqbn arduino:avr:uno --input-file zig/zig-out/firmware/robot.hex
+
+deploy_zig:
+	make compile_zig
+	make upload_zig
+
 monit:
 	arduino-cli monitor -p /dev/${DEVICE}
