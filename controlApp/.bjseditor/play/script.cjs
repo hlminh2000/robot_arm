@@ -1736,9 +1736,61 @@ var JointControl = class {
   }
 };
 
+// Users/minhha/personal/robot_arm/controlApp/src/scripts/targetControl.ts
+var targetControl_exports = {};
+__export(targetControl_exports, {
+  default: () => MyScriptComponent
+});
+var import_babylonjs64 = require("babylonjs");
+var MyScriptComponent = class {
+  constructor(mesh) {
+    this.mesh = mesh;
+  }
+  static {
+    __name(this, "MyScriptComponent");
+  }
+  scenePointerDownNormal;
+  onStart() {
+    const scene = this.mesh.getScene();
+    scene.onPointerObservable.add((pointerInfo) => {
+      ({
+        [import_babylonjs64.PointerEventTypes.POINTERDOWN]: () => {
+          const pickResult = pointerInfo.pickInfo;
+          if (pickResult.hit && pickResult.pickedMesh === this.mesh) {
+            scene.activeCamera.detachControl();
+            this.scenePointerDownNormal = this.mesh.getFacetNormal(pickResult.faceId);
+          }
+        },
+        [import_babylonjs64.PointerEventTypes.POINTERUP]: () => {
+          scene.activeCamera.attachControl();
+          this.scenePointerDownNormal = null;
+        },
+        [import_babylonjs64.PointerEventTypes.POINTERMOVE]: () => {
+          if (!this.scenePointerDownNormal) return;
+          const movingPlane = import_babylonjs64.Plane.FromPositionAndNormal(this.mesh.position, this.scenePointerDownNormal);
+          const worldPoint = this.castScenePointerRay(scene, new import_babylonjs64.Vector2(scene.pointerX, scene.pointerY), movingPlane);
+          this.mesh.position.x = worldPoint.x;
+          this.mesh.position.y = worldPoint.y;
+          this.mesh.position.z = worldPoint.z;
+        }
+      })[pointerInfo.type]?.();
+    });
+  }
+  castScenePointerRay(scene, scenePoint, plane) {
+    const ray = scene.createPickingRay(scenePoint.x, scenePoint.y, import_babylonjs64.Matrix.Identity(), scene.activeCamera);
+    const movingPlane = plane;
+    const distance = ray.intersectsPlane(movingPlane);
+    const worldPoint = ray.origin.add(ray.direction.scale(distance));
+    return worldPoint;
+  }
+  onUpdate() {
+  }
+};
+
 // Users/minhha/personal/robot_arm/controlApp/src/scripts.ts
 var scriptsMap = {
-  "scripts/jointControl.ts": jointControl_exports
+  "scripts/jointControl.ts": jointControl_exports,
+  "scripts/targetControl.ts": targetControl_exports
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

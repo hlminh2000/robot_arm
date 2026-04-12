@@ -5,9 +5,11 @@
 
 import { loadScene, scriptsDictionary, scriptAssetsCache, _applyScriptsForObject, _removeRegisteredScriptInstance, _preloadScriptsAssets } from "babylonjs-editor-tools";
 import * as scripts_jointControl from "./scripts/jointControl";
+import * as scripts_targetControl from "./scripts/targetControl";
 
 export const scriptsMap = {
-    "scripts/jointControl.ts": scripts_jointControl
+    "scripts/jointControl.ts": scripts_jointControl,
+	"scripts/targetControl.ts": scripts_targetControl
 };
 
 export { loadScene, scriptsDictionary, scriptAssetsCache, _applyScriptsForObject, _removeRegisteredScriptInstance, _preloadScriptsAssets };
