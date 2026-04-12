@@ -1,7 +1,7 @@
 import { Matrix, Plane, PointerEventTypes, Scene, Vector2, Vector3 } from "@babylonjs/core";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 
-const castScenePointerRay(scene: Scene, scenePoint: Vector2, plane: Plane) {
+const castScenePointerRay = (scene: Scene, scenePoint: Vector2, plane: Plane) => {
     const ray = scene.createPickingRay(scenePoint.x, scenePoint.y, Matrix.Identity(), scene.activeCamera);
     const movingPlane = plane;
     const distance = ray.intersectsPlane(movingPlane);
