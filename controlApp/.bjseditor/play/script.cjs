@@ -1739,15 +1739,15 @@ var JointControl = class {
 // Users/minhha/personal/robot_arm/controlApp/src/scripts/targetControl.ts
 var targetControl_exports = {};
 __export(targetControl_exports, {
-  default: () => MyScriptComponent
+  default: () => TargetControl
 });
 var import_babylonjs64 = require("babylonjs");
-var MyScriptComponent = class {
+var TargetControl = class _TargetControl {
   constructor(mesh) {
     this.mesh = mesh;
   }
   static {
-    __name(this, "MyScriptComponent");
+    __name(this, "TargetControl");
   }
   scenePointerDownNormal;
   onStart() {
@@ -1756,10 +1756,9 @@ var MyScriptComponent = class {
       ({
         [import_babylonjs64.PointerEventTypes.POINTERDOWN]: () => {
           const pickResult = pointerInfo.pickInfo;
-          if (pickResult.hit && pickResult.pickedMesh === this.mesh) {
-            scene.activeCamera.detachControl();
-            this.scenePointerDownNormal = this.mesh.getFacetNormal(pickResult.faceId);
-          }
+          if (pickResult?.pickedMesh === this.mesh) return;
+          scene.activeCamera.detachControl();
+          this.scenePointerDownNormal = this.mesh.getFacetNormal(pickResult.faceId);
         },
         [import_babylonjs64.PointerEventTypes.POINTERUP]: () => {
           scene.activeCamera.attachControl();
@@ -1768,15 +1767,12 @@ var MyScriptComponent = class {
         [import_babylonjs64.PointerEventTypes.POINTERMOVE]: () => {
           if (!this.scenePointerDownNormal) return;
           const movingPlane = import_babylonjs64.Plane.FromPositionAndNormal(this.mesh.position, this.scenePointerDownNormal);
-          const worldPoint = this.castScenePointerRay(scene, new import_babylonjs64.Vector2(scene.pointerX, scene.pointerY), movingPlane);
-          this.mesh.position.x = worldPoint.x;
-          this.mesh.position.y = worldPoint.y;
-          this.mesh.position.z = worldPoint.z;
+          this.mesh.position = _TargetControl.castScenePointerRay(scene, new import_babylonjs64.Vector2(scene.pointerX, scene.pointerY), movingPlane);
         }
       })[pointerInfo.type]?.();
     });
   }
-  castScenePointerRay(scene, scenePoint, plane) {
+  static castScenePointerRay(scene, scenePoint, plane) {
     const ray = scene.createPickingRay(scenePoint.x, scenePoint.y, import_babylonjs64.Matrix.Identity(), scene.activeCamera);
     const movingPlane = plane;
     const distance = ray.intersectsPlane(movingPlane);
