@@ -1,6 +1,6 @@
 pub const Servo = struct {
-    id: u8,
-    pin: ?c_int,
+    _id: u8,
+    _pin: ?c_int,
 
     const _attach = @extern(*const fn (u8, c_int) callconv(.c) u8, .{ .name = "servo_attach" });
     const _attachMinmax = @extern(*const fn (u8, c_int, c_int, c_int) callconv(.c) u8, .{ .name = "servo_attach_minmax" });
@@ -11,17 +11,23 @@ pub const Servo = struct {
     const _attached = @extern(*const fn (u8) callconv(.c) bool, .{ .name = "servo_attached" });
     const _detach = @extern(*const fn (u8) callconv(.c) void, .{ .name = "servo_detach" });
 
-    pub fn init(_id: u4) Servo {
-        return .{ .id = _id, .pin = null };
+    pub fn init(__id: u4) Servo {
+        return .{ ._id = __id, ._pin = null };
     }
-    pub fn attach(self: *Servo, pin: c_int) void {
-        _ = _attach(self.id, pin);
-        self.pin = pin;
+    pub fn id(self: Servo) u8 {
+        return self._id;
+    }
+    pub fn pin(self: Servo) ?c_int {
+        return self._pin;
+    }
+    pub fn attach(self: *Servo, __pin: c_int) void {
+        _ = _attach(self._id, __pin);
+        self._pin = __pin;
     }
     pub fn write(self: Servo, angleDegree: c_int) void {
-        _ = _write(self.id, angleDegree);
+        _ = _write(self._id, angleDegree);
     }
     pub fn read(self: Servo) c_int {
-        return _read(self.id);
+        return _read(self._id);
     }
 };

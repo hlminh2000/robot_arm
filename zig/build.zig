@@ -27,6 +27,9 @@ pub fn build(b: *std.Build) void {
         "wiring.c",
         "wiring_digital.c",
         "wiring_analog.c",
+        "wiring_pulse.c",
+        "wiring_pulse.S",
+        "wiring_shift.c",
         "hooks.c",
         "WInterrupts.c",
     };
@@ -37,6 +40,7 @@ pub fn build(b: *std.Build) void {
         "WString.cpp",
         "Print.cpp",
         "Stream.cpp",
+        "Tone.cpp",
         "HardwareSerial.cpp",
         "HardwareSerial0.cpp",
         "abi.cpp",

@@ -1,25 +1,23 @@
 const arduino = @import("lib/arduino.zig");
+const DigitalControlledServo = @import("common/DigitalControlledServo.zig").DigitalControlledServo;
 const Servo = @import("lib/servo.zig").Servo;
 const Serial = arduino.Serial;
 
-var s0 = Servo.init(0);
-
-var angle: c_int = 0;
-var direction: c_int = 1;
+var gripper: ?DigitalControlledServo = null;
 
 export fn setup() callconv(.c) void {
-    arduino.delay(1000);
     Serial.begin(9600);
     Serial.println("boot: ATmega328P ready");
 
-    _ = s0.attach(3);
-    Serial.print("servo 0 attached on pin ");
-    Serial.println(s0.pin orelse 0);
+    gripper = DigitalControlledServo.init("gripper", 12, 6);
 }
 
 export fn loop() callconv(.c) void {
-    s0.write(angle);
-    angle += direction;
-    if (angle >= 180 or angle <= 0) direction = -direction;
+    const g = &(gripper orelse {
+        Serial.print("No gripper");
+        return;
+    });
+
+    g.sync();
     arduino.delay(15);
 }
