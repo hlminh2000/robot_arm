@@ -1,5 +1,5 @@
-const Arduino = @import("../lib//arduino.zig");
-const Serial = @import("../lib//arduino.zig").Serial;
+const Arduino = @import("../lib/arduino.zig");
+const Serial = @import("../lib/arduino.zig").Serial;
 const Servo = @import("../lib/servo.zig").Servo;
 const String = @import("types.zig").String;
 
