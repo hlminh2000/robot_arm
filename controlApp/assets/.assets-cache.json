@@ -1,5 +1,5 @@
 {
 	"src/scripts/new-script.ts": {
-		"newRelativePath": "src/scripts/targetControl.ts"
+		"newRelativePath": "src/scripts/inverseKinematics.ts"
 	}
 }

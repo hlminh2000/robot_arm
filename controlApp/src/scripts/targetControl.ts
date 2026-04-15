@@ -1,4 +1,4 @@
-import { Matrix, Plane, PointerEventTypes, Scene, Vector2, Vector3 } from "@babylonjs/core";
+import { Matrix, Observable, Plane, PointerEventTypes, Scene, Vector2, Vector3 } from "@babylonjs/core";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 
 const castScenePointerRay = (scene: Scene, scenePoint: Vector2, plane: Plane) => {
@@ -10,6 +10,7 @@ const castScenePointerRay = (scene: Scene, scenePoint: Vector2, plane: Plane) =>
 }
 export default class TargetControl {
     private scenePointerDownNormal: Vector3 | null;
+    static targetControlPositionObs = new Observable<Vector3>();
 
     public constructor(public mesh: Mesh) {
     }
@@ -20,7 +21,7 @@ export default class TargetControl {
             ({
                 [PointerEventTypes.POINTERDOWN]: () => {
                     const pickResult = pointerInfo.pickInfo;
-                    if(pickResult?.pickedMesh === this.mesh) return;
+                    if(pickResult?.pickedMesh !== this.mesh) return;
                     scene.activeCamera.detachControl();
                     this.scenePointerDownNormal = this.mesh.getFacetNormal(pickResult.faceId);
                 },
@@ -33,6 +34,7 @@ export default class TargetControl {
                     const scenePointerDown = new Vector2(scene.pointerX, scene.pointerY);
                     const movingPlane = Plane.FromPositionAndNormal(this.mesh.position, this.scenePointerDownNormal);
                     this.mesh.position = castScenePointerRay(scene, scenePointerDown, movingPlane);
+                    TargetControl.targetControlPositionObs.notifyObservers(this.mesh.position);
                 }
             } as const)[pointerInfo.type]?.();
         })
@@ -40,5 +42,4 @@ export default class TargetControl {
 
     public onUpdate(): void {
     }
-
 }

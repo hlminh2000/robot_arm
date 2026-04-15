@@ -6,10 +6,12 @@
 import { loadScene, scriptsDictionary, scriptAssetsCache, _applyScriptsForObject, _removeRegisteredScriptInstance, _preloadScriptsAssets } from "babylonjs-editor-tools";
 import * as scripts_jointControl from "./scripts/jointControl";
 import * as scripts_targetControl from "./scripts/targetControl";
+import * as scripts_inverseKinematics from "./scripts/inverseKinematics";
 
 export const scriptsMap = {
     "scripts/jointControl.ts": scripts_jointControl,
-	"scripts/targetControl.ts": scripts_targetControl
+	"scripts/targetControl.ts": scripts_targetControl,
+	"scripts/inverseKinematics.ts": scripts_inverseKinematics
 };
 
 export { loadScene, scriptsDictionary, scriptAssetsCache, _applyScriptsForObject, _removeRegisteredScriptInstance, _preloadScriptsAssets };

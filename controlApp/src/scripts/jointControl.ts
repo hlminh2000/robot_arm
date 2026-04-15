@@ -1,5 +1,5 @@
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
-import { Matrix, PointerEventTypes, Tools, Vector2, Vector3, Viewport } from "@babylonjs/core";
+import { AbstractMesh, Matrix, Observable, PointerEventTypes, Tools, Vector2, Vector3, Viewport } from "@babylonjs/core";
 
 function getSignedAngleRad(vecA: Vector2, vecB: Vector2): number {
     const dot = vecA.x * vecB.x + vecA.y * vecB.y;
@@ -13,8 +13,6 @@ const clamp = (value: number, min: number, max: number) => (
 )
 
 export default class JointControl {
-    private jointMesh: Mesh;
-
     private isMoving: boolean = false;
 
     private currentJointAngle = 0;
@@ -22,16 +20,24 @@ export default class JointControl {
 
     private scenePointerDown: Vector2 | null = null;
 
+    static jointAngleObs = new Observable<{jointMesh: AbstractMesh}>()
+
     public constructor(public mesh: Mesh) {
-        this.jointMesh = mesh;
-        this.currentJointAngle = Tools.ToDegrees(this.jointMesh.rotation.z);
+        this.currentJointAngle = Tools.ToDegrees(this.mesh.rotation.z);
         this.lastJointAngle = this.currentJointAngle;
     }
 
     public onStart(): void {
-        const arm = this.jointMesh.getChildMeshes().find((m) => m.name === "Arm");
+        const arm = this.mesh.getChildMeshes().find((m) => m.name === "Arm");
+        
+        JointControl.jointAngleObs.add(({jointMesh}) => {
+            if (jointMesh === this.mesh) {
+                this.setJointAngle(Tools.ToDegrees(jointMesh.rotation.z));
+            }
+        })
 
         const scene = arm.getScene();
+
         scene.onPointerObservable.add((pointerInfo) => {
             ({ 
                 [PointerEventTypes.POINTERDOWN]: () => {
@@ -53,7 +59,7 @@ export default class JointControl {
                         return;
                     }
                     const projectedJointPosition = Vector3.Project(
-                        this.jointMesh.getAbsolutePivotPoint(),
+                        this.mesh.getAbsolutePivotPoint(),
                         Matrix.Identity(),
                         scene.getTransformMatrix(),
                         new Viewport(0, 0, 1, 1).toGlobal(
@@ -82,12 +88,9 @@ export default class JointControl {
 
     private setJointAngle(deg: number) {
         this.currentJointAngle = deg;
-        this.jointMesh.rotation.z = Tools.ToRadians(deg);
-        console.log('window.parent:', window.parent);
-        console.log('window.parent?.electron:', window.parent?.electron);
-        console.log('window.electron:', window.electron);
+        this.mesh.rotation.z = Tools.ToRadians(deg);
         window.electron.send('send-to-arduino', JSON.stringify({
-            joint: this.jointMesh.name,
+            joint: this.mesh.name,
             angle: deg + 90,
         }));
     }

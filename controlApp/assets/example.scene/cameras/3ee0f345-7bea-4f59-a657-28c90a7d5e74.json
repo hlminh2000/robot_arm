@@ -18,7 +18,7 @@
         -0.8027693232244494,
         0
     ],
-    "speed": 500,
+    "speed": 300,
     "position": [
         471.60030037040616,
         296.8333020331597,
@@ -29,6 +29,10 @@
         1,
         0
     ],
+    "orthoLeft": -839.5,
+    "orthoRight": 839.5,
+    "orthoBottom": -419.5,
+    "orthoTop": 419.5,
     "fov": 0.8,
     "projectionPlaneTilt": 0,
     "minZ": 1,

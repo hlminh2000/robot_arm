@@ -1,0 +1,193 @@
+{
+    "meshes": [
+        {
+            "name": "New Box",
+            "id": "9bfa1a33-3b41-484f-9b7e-0d3c9aa346a7",
+            "uniqueId": 1776025581498,
+            "type": "Mesh",
+            "position": [
+                146.6017419550605,
+                62.06192712454006,
+                0
+            ],
+            "rotationQuaternion": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "scaling": [
+                1,
+                1,
+                1
+            ],
+            "localMatrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "isEnabled": true,
+            "isVisible": true,
+            "infiniteDistance": false,
+            "pickable": true,
+            "receiveShadows": true,
+            "billboardMode": 0,
+            "visibility": 1,
+            "alwaysSelectAsActiveMesh": false,
+            "checkCollisions": false,
+            "ellipsoid": [
+                0.5,
+                1,
+                0.5
+            ],
+            "ellipsoidOffset": [
+                0,
+                0,
+                0
+            ],
+            "doNotSyncBoundingInfo": false,
+            "isBlocker": false,
+            "sideOrientation": 1,
+            "isUnIndexed": false,
+            "geometryUniqueId": 1776025581499,
+            "geometryId": "f4e9164e-be00-4ec2-886d-654666a4bccd",
+            "subMeshes": null,
+            "materialId": "default material",
+            "metadata": {
+                "type": "Box",
+                "width": 50,
+                "depth": 50,
+                "height": 50,
+                "sideOrientation": 0,
+                "scripts": [
+                    {
+                        "enabled": true,
+                        "key": "scripts/targetControl.ts",
+                        "_id": "41976f2f-212f-47b8-8652-1579e55f71af"
+                    }
+                ]
+            },
+            "instances": [],
+            "animations": [],
+            "ranges": [],
+            "layerMask": 268435455,
+            "alphaIndex": 1.7976931348623157e+308,
+            "hasVertexAlpha": false,
+            "overlayAlpha": 0,
+            "overlayColor": [
+                0,
+                0,
+                0
+            ],
+            "renderOverlay": false,
+            "applyFog": true,
+            "delayLoadingFile": "assets/example.scene/geometries/f4e9164e-be00-4ec2-886d-654666a4bccd.babylonbinarymeshdata",
+            "boundingBoxMaximum": [
+                25,
+                25,
+                25
+            ],
+            "boundingBoxMinimum": [
+                -25,
+                -25,
+                -25
+            ],
+            "_binaryInfo": {
+                "positionsAttrDesc": {
+                    "count": 72,
+                    "stride": 3,
+                    "offset": 0,
+                    "dataType": 1
+                },
+                "normalsAttrDesc": {
+                    "count": 72,
+                    "stride": 3,
+                    "offset": 288,
+                    "dataType": 1
+                },
+                "uvsAttrDesc": {
+                    "count": 48,
+                    "stride": 2,
+                    "offset": 576,
+                    "dataType": 1
+                },
+                "indicesAttrDesc": {
+                    "count": 36,
+                    "stride": 1,
+                    "offset": 768,
+                    "dataType": 0
+                },
+                "subMeshesAttrDesc": {
+                    "count": 1,
+                    "stride": 5,
+                    "offset": 912,
+                    "dataType": 0
+                }
+            },
+            "positions": null,
+            "normals": null,
+            "uvs": null,
+            "hasUVs": true,
+            "indices": null
+        }
+    ],
+    "transformNodes": [],
+    "cameras": [],
+    "lights": [],
+    "materials": [],
+    "geometries": {
+        "boxes": [],
+        "spheres": [],
+        "cylinders": [],
+        "toruses": [],
+        "grounds": [],
+        "planes": [],
+        "torusKnots": [],
+        "vertexData": []
+    },
+    "metadata": {
+        "type": "Box",
+        "width": 50,
+        "depth": 50,
+        "height": 50,
+        "sideOrientation": 0,
+        "scripts": [
+            {
+                "enabled": true,
+                "key": "scripts/targetControl.ts",
+                "_id": "41976f2f-212f-47b8-8652-1579e55f71af"
+            }
+        ]
+    },
+    "basePoseMatrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+    ]
+}
