@@ -32,13 +32,13 @@
     // Once all dependencies are fetched, `zig build` no longer requires
     // internet connectivity.
     .dependencies = .{
-        .microzig = .{
-            .url = "https://github.com/ZigEmbeddedGroup/microzig/releases/download/0.15.1/microzig.tar.gz",
-            .hash = "microzig-0.15.1-D20YSQYfCACrGl4NnHj6WXgGJUJvoEvLOJKBzeBzt-qX",
+        .@"ArduinoCore-avr" = .{
+            .url = "https://github.com/arduino/ArduinoCore-avr/archive/refs/tags/1.8.7.tar.gz",
+            .hash = "N-V-__8AALwaZQHaBU6el1KwnNzcKWTmItTAU-jD6hyRrOcr",
         },
-        .avr_c = .{
-            .url = "https://github.com/lkoepsel/AVR_C/archive/refs/tags/v0.6.0.tar.gz",
-            .hash = "N-V-__8AAH5sAwA9Inzw_WNzcRmui_gxTsPxxrE2piLb7G7t",
+        .Servo = .{
+            .url = "https://github.com/arduino-libraries/Servo/archive/refs/tags/1.2.2.tar.gz",
+            .hash = "N-V-__8AAN5rAwBmKG3VlZlsJIcdVaGDlhxUWO8hNk-XQ8pr",
         },
     },
     .paths = .{

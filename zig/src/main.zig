@@ -1,41 +1,25 @@
-const microzig = @import("microzig");
-const avr = @import("avr.zig");
-const gpio = microzig.hal.gpio;
+const arduino = @import("lib/arduino.zig");
+const Servo = @import("lib/servo.zig").Servo;
+const Serial = arduino.Serial;
 
-comptime {
-    asm (
-        \\.section microzig_flash_start,"ax",@progbits
-        \\jmp microzig_start
-    );
+var s0 = Servo.init(0);
+
+var angle: c_int = 0;
+var direction: c_int = 1;
+
+export fn setup() callconv(.c) void {
+    arduino.delay(1000);
+    Serial.begin(9600);
+    Serial.println("boot: ATmega328P ready");
+
+    _ = s0.attach(3);
+    Serial.print("servo 0 attached on pin ");
+    Serial.println(s0.pin orelse 0);
 }
 
-const led = gpio.pin(.b, 5);
-
-pub fn main() !void {
-    var loop_count: u16 = 0;
-    avr.uart_init();
-    led.set_direction(.output);
-
-    print("boot: ATmega328P ready\r\n");
-
-    while (true) {
-        led.toggle();
-        loop_count +%= 1;
-        print("tick\r\n");
-
-        delay(800_000);
-    }
-}
-
-fn delay(limit: u32) void {
-    var i: u32 = 0;
-    while (i < limit) : (i += 1) {
-        asm volatile ("");
-    }
-}
-
-fn print(s: []const u8) void {
-    for (s) |c| {
-        _ = avr.uart_putchar(c, null);
-    }
+export fn loop() callconv(.c) void {
+    s0.write(angle);
+    angle += direction;
+    if (angle >= 180 or angle <= 0) direction = -direction;
+    arduino.delay(15);
 }
