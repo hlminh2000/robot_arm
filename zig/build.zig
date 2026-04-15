@@ -77,26 +77,14 @@ pub fn build(b: *std.Build) void {
         link.addFileArg(obj);
     }
 
+    const include_paths = &[_]std.Build.LazyPath{ avr_core_path, avr_variant_path, servo_src_path };
+
     // Servo library
-    const servo_compile = b.addSystemCommand(&.{avr_gpp});
-    for (common_flags) |flag| servo_compile.addArg(flag);
-    servo_compile.addPrefixedDirectoryArg("-I", avr_core_path);
-    servo_compile.addPrefixedDirectoryArg("-I", avr_variant_path);
-    servo_compile.addPrefixedDirectoryArg("-I", servo_src_path);
-    servo_compile.addFileArg(servo_dep.path("src/avr/Servo.cpp"));
-    servo_compile.addArg("-o");
-    const servo_obj = servo_compile.addOutputFileArg("Servo.cpp.o");
+    const servo_obj = compileWithAvrGpp(b, avr_gpp, common_flags, include_paths, servo_dep.path("src/avr/Servo.cpp"), "Servo.cpp.o");
     link.addFileArg(servo_obj);
 
     // C++ bridge (needs Servo.h for servo functions)
-    const bridge_compile = b.addSystemCommand(&.{avr_gpp});
-    for (common_flags) |flag| bridge_compile.addArg(flag);
-    bridge_compile.addPrefixedDirectoryArg("-I", avr_core_path);
-    bridge_compile.addPrefixedDirectoryArg("-I", avr_variant_path);
-    bridge_compile.addPrefixedDirectoryArg("-I", servo_src_path);
-    bridge_compile.addFileArg(b.path("src/lib/arduino_bridge.cpp"));
-    bridge_compile.addArg("-o");
-    const bridge_obj = bridge_compile.addOutputFileArg("arduino_bridge.cpp.o");
+    const bridge_obj = compileWithAvrGpp(b, avr_gpp, common_flags, include_paths, b.path("src/lib/arduino_bridge.cpp"), "arduino_bridge.cpp.o");
     link.addFileArg(bridge_obj);
 
     link.addArg("-lm");
@@ -117,6 +105,22 @@ pub fn build(b: *std.Build) void {
     const install_hex = b.addInstallFileWithDir(hex_output, .prefix, "firmware/robot.hex");
     b.getInstallStep().dependOn(&install_elf.step);
     b.getInstallStep().dependOn(&install_hex.step);
+}
+
+fn compileWithAvrGpp(
+    b: *std.Build,
+    avr_gpp: []const u8,
+    common_flags: []const []const u8,
+    include_paths: []const std.Build.LazyPath,
+    source: std.Build.LazyPath,
+    out_name: []const u8,
+) std.Build.LazyPath {
+    const compile = b.addSystemCommand(&.{avr_gpp});
+    for (common_flags) |flag| compile.addArg(flag);
+    for (include_paths) |p| compile.addPrefixedDirectoryArg("-I", p);
+    compile.addFileArg(source);
+    compile.addArg("-o");
+    return compile.addOutputFileArg(out_name);
 }
 
 fn compileWithAvrGcc(
