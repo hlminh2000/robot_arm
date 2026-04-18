@@ -1,15 +1,15 @@
 pub const ServoAllocationError = error{OutOfServos};
 var usedIndices = initUsedIndices: {
-    var indices: [12]?u8 = undefined;
+    var indices: [12]?bool = undefined;
     for (0..indices.len) |i| {
-        indices[i] = null;
+        indices[i] = false;
     }
     break :initUsedIndices indices;
 };
-var currentIndex: u8 = 0;
+var currentIndex: u4 = 0;
 fn getNextOpenIndex() ServoAllocationError!@TypeOf(currentIndex) {
     var nextIndex = currentIndex;
-    while (usedIndices[nextIndex] != null) {
+    while (usedIndices[nextIndex] != false) {
         nextIndex += 1;
         if (nextIndex >= usedIndices.len) return ServoAllocationError.OutOfServos;
     }
@@ -17,7 +17,7 @@ fn getNextOpenIndex() ServoAllocationError!@TypeOf(currentIndex) {
 }
 
 pub const Servo = struct {
-    _id: u8,
+    _id: u4,
     _pin: ?c_int,
 
     const _attach = @extern(*const fn (u8, c_int) callconv(.c) u8, .{ .name = "servo_attach" });
@@ -31,13 +31,13 @@ pub const Servo = struct {
 
     pub fn acquire() ServoAllocationError!Servo {
         currentIndex = try getNextOpenIndex();
-        usedIndices[currentIndex] = currentIndex;
+        usedIndices[currentIndex] = true;
         return .{ ._id = currentIndex, ._pin = null };
     }
     pub fn release(self: Servo) void {
         _detach(self._id);
         currentIndex = self._id;
-        usedIndices[currentIndex] = null;
+        usedIndices[currentIndex] = false;
         currentIndex = if (currentIndex == 0) 0 else currentIndex - 1;
     }
     pub fn id(self: Servo) u8 {
