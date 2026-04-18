@@ -15,6 +15,8 @@ export fn setup() callconv(.c) void {
     var joint2 = AnalogControlledServo.init(.{ .name = "Joint 2", .controlPin = 1, .servoPin = 5 }) catch return;
     defer joint2.deinit();
 
+    Serial.print(gripper._name);
+
     Serial.println("boot: ATmega328P ready");
 
     while (true) {

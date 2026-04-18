@@ -40,12 +40,6 @@ pub const Servo = struct {
         usedIndices[currentIndex] = false;
         currentIndex = if (currentIndex == 0) 0 else currentIndex - 1;
     }
-    pub fn id(self: Servo) u8 {
-        return self._id;
-    }
-    pub fn pin(self: Servo) ?c_int {
-        return self._pin;
-    }
     pub fn attach(self: *Servo, _pin: c_int) void {
         _ = _attach(self._id, _pin);
         self._pin = _pin;
