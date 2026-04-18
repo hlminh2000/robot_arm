@@ -93,7 +93,7 @@ pub fn build(b: *std.Build) void {
     link.addFileArg(servo_obj);
 
     // C++ bridge (needs Servo.h for servo functions)
-    const bridge_obj = compileWithAvrGpp(b, avr_gpp, common_flags, include_paths, b.path("src/lib/arduino_bridge.cpp"), "arduino_bridge.cpp.o");
+    const bridge_obj = compileWithAvrGpp(b, avr_gpp, common_flags, include_paths, b.path("src/lib/bridge/index.cpp"), "index.cpp.o");
     link.addFileArg(bridge_obj);
 
     link.addArg("-lm");

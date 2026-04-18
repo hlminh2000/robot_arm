@@ -6,22 +6,13 @@ const Serial = arduino.Serial;
 
 export fn setup() callconv(.c) void {
     Serial.begin(9600);
-    var gripper = GripperServo.init("gripper", 12, 6) catch {
-        Serial.println("No gripper available.");
-        return;
-    };
+    var gripper = GripperServo.init("gripper", 12, 6) catch return;
     defer gripper.deinit();
 
-    var joint1 = AnalogControlledServo.init("Joint 1", 0, 3) catch {
-        Serial.println("No joint 1 available.");
-        return;
-    };
+    var joint1 = AnalogControlledServo.init("Joint 1", 0, 3) catch return;
     defer joint1.deinit();
 
-    var joint2 = AnalogControlledServo.init("Joint 2", 1, 5) catch {
-        Serial.println("No joint 2 available.");
-        return;
-    };
+    var joint2 = AnalogControlledServo.init("Joint 2", 1, 5) catch return;
     defer joint2.deinit();
 
     Serial.println("boot: ATmega328P ready");
