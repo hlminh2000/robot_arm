@@ -8,6 +8,10 @@ const String = @import("types.zig").String;
 const maxSpeedPerSecond: f32 = 180.0;
 const startingAngle = 90;
 
+fn clamp(value: f32, min: f32, max: f32) f32 {
+    return @max(@min(value, max), min);
+}
+
 pub const AnalogControlledServo = struct {
     _name: String,
     _ticker: Ticker,
@@ -49,8 +53,9 @@ pub const AnalogControlledServo = struct {
         }
 
         const targetAngle = self._targetAngle;
-        self._targetAngle = if (targetAngle < 0) 0 else if (targetAngle > 179) 179 else targetAngle + self._velocity;
-        const nextAngle = self._currentAngle + self._velocity * deltaTimeSeconds;
+        const clampedTargetAngle = clamp(targetAngle, 0, 180);
+        self._targetAngle = if (clampedTargetAngle == targetAngle) targetAngle + self._velocity else clampedTargetAngle;
+        const nextAngle = clamp(self._currentAngle + self._velocity * deltaTimeSeconds, 0, 180);
         self._servo.write(@intFromFloat(nextAngle));
         self._currentAngle = nextAngle;
     }
