@@ -26,7 +26,7 @@ pub const AnalogControlledServo = struct {
             ._name = name,
             ._controlPin = controlPin,
             ._servo = servo,
-            ._ticker = Ticker.init(1),
+            ._ticker = Ticker.init(0),
         };
     }
     pub fn deinit(self: *AnalogControlledServo) void {
