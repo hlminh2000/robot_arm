@@ -15,6 +15,8 @@ pub fn build(b: *std.Build) void {
         "-c",
         "-mmcu=atmega328p",
         "-Os",
+        "-ffunction-sections",
+        "-fdata-sections",
         "-DF_CPU=16000000UL",
         "-DBAUD=9600",
         "-DARDUINO=10810",
@@ -57,6 +59,9 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = .ReleaseSmall,
+        .strip = true,
+        .single_threaded = true,
+        .error_tracing = false,
     });
 
     const zig_obj = b.addObject(.{
@@ -65,7 +70,7 @@ pub fn build(b: *std.Build) void {
     });
 
     // Link everything with avr-gcc (handles CRT startup, linker script, libgcc)
-    const link = b.addSystemCommand(&.{ avr_gcc, "-mmcu=atmega328p" });
+    const link = b.addSystemCommand(&.{ avr_gcc, "-mmcu=atmega328p", "-Wl,--gc-sections" });
     link.addArg("-o");
     const elf_output = link.addOutputFileArg("robot.elf");
 
