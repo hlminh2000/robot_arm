@@ -4,10 +4,10 @@ pub const Ticker = struct {
     _lastTick: c_ulong = 0,
     _interval: u32 = 0,
 
-    pub fn init(interVal: u32) Ticker {
+    pub fn init(options: struct { interVal: u32 = 0 }) Ticker {
         return .{
             ._lastTick = Arduino.millis(),
-            ._interval = interVal,
+            ._interval = options.interVal,
         };
     }
 
