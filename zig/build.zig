@@ -8,8 +8,8 @@ pub fn build(b: *std.Build) void {
     const avr_variant_path = arduino_avr_dep.path("variants/standard");
     const servo_src_path = servo_dep.path("src");
 
-    const avr_gcc = "/opt/homebrew/Cellar/avr-gcc@9/9.5.0/bin/avr-gcc";
-    const avr_gpp = "/opt/homebrew/Cellar/avr-gcc@9/9.5.0/bin/avr-g++";
+    const avr_gcc = "avr-gcc";
+    const avr_gpp = "avr-g++";
 
     const common_flags = &[_][]const u8{
         "-c",

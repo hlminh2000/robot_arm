@@ -1,3 +1,21 @@
+pub const ServoAllocationError = error{OutOfServos};
+var usedIndices = initUsedIndices: {
+    var indices: [12]?u8 = undefined;
+    for (0..indices.len) |i| {
+        indices[i] = null;
+    }
+    break :initUsedIndices indices;
+};
+var currentIndex: u8 = 0;
+fn getNextOpenIndex() ServoAllocationError!@TypeOf(currentIndex) {
+    var nextIndex = currentIndex;
+    while (usedIndices[nextIndex] != null) {
+        nextIndex += 1;
+        if (nextIndex >= usedIndices.len) return ServoAllocationError.OutOfServos;
+    }
+    return nextIndex;
+}
+
 pub const Servo = struct {
     _id: u8,
     _pin: ?c_int,
@@ -11,8 +29,16 @@ pub const Servo = struct {
     const _attached = @extern(*const fn (u8) callconv(.c) bool, .{ .name = "servo_attached" });
     const _detach = @extern(*const fn (u8) callconv(.c) void, .{ .name = "servo_detach" });
 
-    pub fn init(__id: u4) Servo {
-        return .{ ._id = __id, ._pin = null };
+    pub fn acquire() ServoAllocationError!Servo {
+        currentIndex = try getNextOpenIndex();
+        usedIndices[currentIndex] = currentIndex;
+        return .{ ._id = currentIndex, ._pin = null };
+    }
+    pub fn release(self: Servo) void {
+        _detach(self._id);
+        currentIndex = self._id;
+        usedIndices[currentIndex] = null;
+        currentIndex = if (currentIndex == 0) 0 else currentIndex - 1;
     }
     pub fn id(self: Servo) u8 {
         return self._id;
@@ -20,9 +46,9 @@ pub const Servo = struct {
     pub fn pin(self: Servo) ?c_int {
         return self._pin;
     }
-    pub fn attach(self: *Servo, __pin: c_int) void {
-        _ = _attach(self._id, __pin);
-        self._pin = __pin;
+    pub fn attach(self: *Servo, _pin: c_int) void {
+        _ = _attach(self._id, _pin);
+        self._pin = _pin;
     }
     pub fn write(self: Servo, angleDegree: c_int) void {
         _ = _write(self._id, angleDegree);
