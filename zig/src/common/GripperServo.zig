@@ -14,14 +14,14 @@ pub const GripperServo = struct {
     _controlPin: u8,
     _wasOn: bool,
 
-    pub fn init(comptime name: String, controlPin: u8, servoPin: u4) ServoAllocationError!GripperServo {
+    pub fn init(options: struct { name: String, controlPin: u8, servoPin: u4 }) ServoAllocationError!GripperServo {
         var servo = try Servo.acquire();
-        servo.attach(servoPin);
+        servo.attach(options.servoPin);
         servo.write(angleOpen);
-        Arduino.pinMode(controlPin, Arduino.PinMode.input_pullup);
+        Arduino.pinMode(options.controlPin, Arduino.PinMode.input_pullup);
         return .{
-            ._name = name,
-            ._controlPin = controlPin,
+            ._name = options.name,
+            ._controlPin = options.controlPin,
             ._servo = servo,
             ._wasOn = false,
         };

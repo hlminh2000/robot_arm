@@ -18,13 +18,17 @@ pub const AnalogControlledServo = struct {
     _currentAngle: f32 = startingAngle,
     _targetAngle: f32 = startingAngle,
 
-    pub fn init(name: String, controlPin: u8, servoPin: u8) ServoAllocationError!AnalogControlledServo {
+    pub fn init(options: struct {
+        name: String,
+        controlPin: u8,
+        servoPin: u8,
+    }) ServoAllocationError!AnalogControlledServo {
         var servo = try Servo.acquire();
-        servo.attach(servoPin);
+        servo.attach(options.servoPin);
         servo.write(startingAngle);
         return .{
-            ._name = name,
-            ._controlPin = controlPin,
+            ._name = options.name,
+            ._controlPin = options.controlPin,
             ._servo = servo,
             ._ticker = Ticker.init(0),
         };
