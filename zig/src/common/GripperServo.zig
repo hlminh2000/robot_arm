@@ -1,3 +1,4 @@
+const Ticker = @import("./Ticker.zig").Ticker;
 const Arduino = @import("../lib/arduino.zig");
 const Serial = @import("../lib/arduino.zig").Serial;
 const Servo = @import("../lib/servo.zig").Servo;
@@ -10,6 +11,7 @@ const angleClosed: u8 = 45;
 pub const GripperServo = struct {
     _name: String,
     _servo: Servo,
+    _ticker: Ticker,
     _controlPin: u8,
     _wasOn: bool,
 
@@ -23,6 +25,7 @@ pub const GripperServo = struct {
             ._controlPin = controlPin,
             ._servo = servo,
             ._wasOn = false,
+            ._ticker = Ticker.init(5),
         };
     }
 
@@ -31,6 +34,8 @@ pub const GripperServo = struct {
     }
 
     pub fn sync(self: *GripperServo) void {
+        if (!self._ticker.shouldRun()) return;
+
         const controlSignal = Arduino.digitalRead(self._controlPin);
         const isOn = controlSignal == Arduino.DigitalValue.low;
         const pressStateChanged = isOn != self._wasOn;

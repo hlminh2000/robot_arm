@@ -21,7 +21,6 @@ export fn setup() callconv(.c) void {
         gripper.sync();
         joint1.sync();
         joint2.sync();
-        arduino.delay(5);
     }
 }
 

@@ -1,3 +1,4 @@
+const Ticker = @import("./Ticker.zig").Ticker;
 const Arduino = @import("../lib/arduino.zig");
 const Serial = @import("../lib/arduino.zig").Serial;
 const Servo = @import("../lib/servo.zig").Servo;
@@ -9,6 +10,7 @@ const startingAngle = 90;
 
 pub const AnalogControlledServo = struct {
     _name: String,
+    _ticker: Ticker,
     _servo: Servo,
     _controlPin: u8,
 
@@ -24,12 +26,15 @@ pub const AnalogControlledServo = struct {
             ._name = name,
             ._controlPin = controlPin,
             ._servo = servo,
+            ._ticker = Ticker.init(5),
         };
     }
     pub fn deinit(self: *AnalogControlledServo) void {
         self._servo.release();
     }
     pub fn sync(self: *AnalogControlledServo) void {
+        if (!self._ticker.shouldRun()) return;
+
         const controlSignal: f32 = @floatFromInt(Arduino.analogRead(self._controlPin));
         const midPoint: f32 = comptime 1023 / 2;
         const normalized: f32 = (controlSignal - midPoint) / midPoint;
