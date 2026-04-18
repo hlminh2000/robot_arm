@@ -5,7 +5,7 @@ const Servo = @import("../lib/servo.zig").Servo;
 const ServoAllocationError = @import("../lib/servo.zig").ServoAllocationError;
 const String = @import("types.zig").String;
 
-const maxSpeed: f32 = 2.0;
+const maxSpeedPerSecond: f32 = 180.0;
 const startingAngle = 90;
 
 pub const AnalogControlledServo = struct {
@@ -26,27 +26,27 @@ pub const AnalogControlledServo = struct {
             ._name = name,
             ._controlPin = controlPin,
             ._servo = servo,
-            ._ticker = Ticker.init(5),
+            ._ticker = Ticker.init(1),
         };
     }
     pub fn deinit(self: *AnalogControlledServo) void {
         self._servo.release();
     }
     pub fn sync(self: *AnalogControlledServo) void {
-        if (!self._ticker.shouldRun()) return;
+        const deltaTimeSeconds = self._ticker.tickSeconds() orelse return;
 
         const controlSignal: f32 = @floatFromInt(Arduino.analogRead(self._controlPin));
         const midPoint: f32 = comptime 1023 / 2;
         const normalized: f32 = (controlSignal - midPoint) / midPoint;
 
-        self._velocity = -normalized * maxSpeed;
-        if (@abs(self._velocity) < 0.15) {
+        self._velocity = -normalized * maxSpeedPerSecond;
+        if (@abs(self._velocity) < 5) {
             self._velocity = 0.0;
         }
 
         const targetAngle = self._targetAngle;
         self._targetAngle = if (targetAngle < 0) 0 else if (targetAngle > 179) 179 else targetAngle + self._velocity;
-        const nextAngle = self._currentAngle + self._velocity;
+        const nextAngle = self._currentAngle + self._velocity * deltaTimeSeconds;
         self._servo.write(@intFromFloat(nextAngle));
         self._currentAngle = nextAngle;
     }
