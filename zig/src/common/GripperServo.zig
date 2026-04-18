@@ -26,7 +26,7 @@ pub const GripperServo = struct {
         };
     }
 
-    pub fn cleanup(self: *GripperServo) void {
+    pub fn deinit(self: *GripperServo) void {
         self._servo.release();
     }
 

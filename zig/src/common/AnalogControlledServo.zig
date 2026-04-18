@@ -26,7 +26,7 @@ pub const AnalogControlledServo = struct {
             ._servo = servo,
         };
     }
-    pub fn cleanup(self: *AnalogControlledServo) void {
+    pub fn deinit(self: *AnalogControlledServo) void {
         self._servo.release();
     }
     pub fn sync(self: *AnalogControlledServo) void {

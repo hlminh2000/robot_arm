@@ -10,19 +10,19 @@ export fn setup() callconv(.c) void {
         Serial.println("No gripper available.");
         return;
     };
-    defer gripper.cleanup();
+    defer gripper.deinit();
 
     var joint1 = AnalogControlledServo.init("Joint 1", 0, 3) catch {
         Serial.println("No joint 1 available.");
         return;
     };
-    defer joint1.cleanup();
+    defer joint1.deinit();
 
     var joint2 = AnalogControlledServo.init("Joint 2", 1, 5) catch {
         Serial.println("No joint 2 available.");
         return;
     };
-    defer joint2.cleanup();
+    defer joint2.deinit();
 
     Serial.println("boot: ATmega328P ready");
 
