@@ -1,6 +1,6 @@
 const arduino = @import("lib/arduino.zig");
 const GripperServo = @import("common/GripperServo.zig").GripperServo;
-const AnalogServoControl = @import("common/AnalogControlledServo.zig").AnalogServoControl;
+const AnalogServoControl = @import("common/AnalogServoControl.zig").AnalogServoControl;
 const Servo = @import("lib/servo.zig").Servo;
 const Serial = arduino.Serial;
 
