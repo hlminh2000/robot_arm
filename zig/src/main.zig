@@ -1,6 +1,6 @@
 const arduino = @import("lib/arduino.zig");
 const GripperServo = @import("common/GripperServo.zig").GripperServo;
-const AnalogControlledServo = @import("common/AnalogControlledServo.zig").AnalogControlledServo;
+const AnalogServoControl = @import("common/AnalogControlledServo.zig").AnalogServoControl;
 const Servo = @import("lib/servo.zig").Servo;
 const Serial = arduino.Serial;
 
@@ -9,11 +9,15 @@ export fn setup() callconv(.c) void {
     var gripper = GripperServo.init(.{ .name = "gripper", .controlPin = 12, .servoPin = 6 }) catch return;
     defer gripper.deinit();
 
-    var joint1 = AnalogControlledServo.init(.{ .name = "Joint 1", .controlPin = 0, .servoPin = 3 }) catch return;
-    defer joint1.deinit();
+    var joint1Servo = Servo.acquire() catch return;
+    defer joint1Servo.release();
+    joint1Servo.attach(3);
+    var joint1AnalogControl = AnalogServoControl.init(.{ .name = "Joint 1", .controlPin = 0, .servo = &joint1Servo }) catch return;
 
-    var joint2 = AnalogControlledServo.init(.{ .name = "Joint 2", .controlPin = 1, .servoPin = 5 }) catch return;
-    defer joint2.deinit();
+    var joint2Servo = Servo.acquire() catch return;
+    defer joint2Servo.release();
+    joint2Servo.attach(5);
+    var joint2AnalogControl = AnalogServoControl.init(.{ .name = "Joint 2", .controlPin = 1, .servo = &joint2Servo }) catch return;
 
     Serial.print(gripper._name);
 
@@ -21,8 +25,8 @@ export fn setup() callconv(.c) void {
 
     while (true) {
         gripper.sync();
-        joint1.sync();
-        joint2.sync();
+        joint1AnalogControl.sync();
+        joint2AnalogControl.sync();
     }
 }
 

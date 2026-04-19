@@ -20,6 +20,8 @@ pub const Servo = struct {
     _id: u4,
     _pin: ?c_int,
 
+    currentAngleDegree: ?f32 = null,
+
     const _attach = @extern(*const fn (u8, c_int) callconv(.c) u8, .{ .name = "servo_attach" });
     const _attachMinmax = @extern(*const fn (u8, c_int, c_int, c_int) callconv(.c) u8, .{ .name = "servo_attach_minmax" });
     const _write = @extern(*const fn (u8, c_int) callconv(.c) void, .{ .name = "servo_write" });
@@ -44,8 +46,10 @@ pub const Servo = struct {
         _ = _attach(self._id, _pin);
         self._pin = _pin;
     }
-    pub fn write(self: Servo, angleDegree: c_int) void {
-        _ = _write(self._id, angleDegree);
+    pub fn write(self: *Servo, angleDegree: f32) void {
+        self.currentAngleDegree = angleDegree;
+        const angleInt: u8 = @intFromFloat(angleDegree);
+        _ = _write(self._id, angleInt);
     }
     pub fn read(self: Servo) c_int {
         return _read(self._id);

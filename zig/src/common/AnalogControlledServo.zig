@@ -12,51 +12,40 @@ fn clamp(value: f32, min: f32, max: f32) f32 {
     return @max(@min(value, max), min);
 }
 
-pub const AnalogControlledServo = struct {
+pub const AnalogServoControl = struct {
     _name: String,
     _ticker: Ticker,
-    _servo: Servo,
+    _servo: *Servo,
     _controlPin: u8,
-
-    _velocity: f32 = 0,
-    _currentAngle: f32 = startingAngle,
-    _targetAngle: f32 = startingAngle,
 
     pub fn init(options: struct {
         name: String,
         controlPin: u8,
-        servoPin: u8,
-    }) ServoAllocationError!AnalogControlledServo {
-        var servo = try Servo.acquire();
-        servo.attach(options.servoPin);
-        servo.write(startingAngle);
+        servo: *Servo,
+    }) ServoAllocationError!AnalogServoControl {
         return .{
             ._name = options.name,
             ._controlPin = options.controlPin,
-            ._servo = servo,
+            ._servo = options.servo,
             ._ticker = Ticker.init(.{}),
         };
     }
-    pub fn deinit(self: *AnalogControlledServo) void {
-        self._servo.release();
-    }
-    pub fn sync(self: *AnalogControlledServo) void {
+    pub fn sync(self: *AnalogServoControl) void {
         const deltaTimeSeconds = self._ticker.tickSeconds() orelse return;
 
         const controlSignal: f32 = @floatFromInt(Arduino.analogRead(self._controlPin));
-        const midPoint: f32 = comptime 1023 / 2;
-        const normalized: f32 = (controlSignal - midPoint) / midPoint;
+        const midPoint: f32 = comptime 1023.0 / 2.0;
+        const normalized: f32 = (controlSignal - midPoint) / midPoint; // -1 to +1
 
-        self._velocity = -normalized * maxSpeedPerSecond;
-        if (@abs(self._velocity) < 5) {
-            self._velocity = 0.0;
+        var velocity = -normalized * maxSpeedPerSecond;
+        if (@abs(velocity) < 5) {
+            velocity = 0.0;
         }
 
-        const targetAngle = self._targetAngle;
-        const clampedTargetAngle = clamp(targetAngle, 0, 180);
-        self._targetAngle = if (clampedTargetAngle == targetAngle) targetAngle + self._velocity else clampedTargetAngle;
-        const nextAngle = clamp(self._currentAngle + self._velocity * deltaTimeSeconds, 0, 180);
-        self._servo.write(@intFromFloat(nextAngle));
-        self._currentAngle = nextAngle;
+        const physicalServoAngle = @as(f32, @floatFromInt(self._servo.read()));
+        const currentAngle: f32 = self._servo.currentAngleDegree orelse physicalServoAngle;
+
+        const nextAngle = clamp(currentAngle + velocity * deltaTimeSeconds, 0, 180);
+        self._servo.write(nextAngle);
     }
 };
